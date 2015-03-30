@@ -76,7 +76,10 @@ echo "#########################################################################"
 echo
 
 # Check existence of GPG public key
-if [ ! -f "${koalad}"/data/KoalaCore/gpg.pub ]; then
+mkdir -p "${koalad}"/data/KoalaCore
+export gpgpub="${koalad}/data/KoalaCore/gpg.pub"
+touch ${gpgpub}
+if [ "`wc -c \"${gpgpub}\" | awk '{print $1}'`" = "0" ]; then
   echo "Don't forget to install your master's GPG public key at:"
   echo "${koalad}"/data/KoalaCore/gpg.pub
 fi
