@@ -7,6 +7,7 @@ fi
 
 # Setup environment variables
 export    confdphp="/etc/php5/conf.d"
+export       crond="/etc/cron.d"
 export      koalad="/usr/local/koalad"
 export  libvirtphp="http://libvirt.org/sources/php/libvirt-php-0.4.8.tar.gz"
 export          wd="`pwd`"
@@ -24,6 +25,15 @@ apt-get install -y bridge-utils build-essential git gnutls-bin libvirt-bin \
 # Clean-up after ourselves
 apt-get autoremove -y
 apt-get autoclean
+
+# Search for PHP executable
+if [ "`which php`" = "" ]; then
+  echo "Could not find PHP executable."
+  exit 2
+fi
+
+# Define variable for PHP executable
+export php="`which php`"
 
 # Make sure required directories are created
 for i in "${confdphp}" `basename "${koalad}"` "${tmp}"; do
@@ -50,6 +60,9 @@ if [ ! -d "${koalad}" ]; then
   git clone https://github.com/KoalaVM/koalad "${koalad}"
 fi
 cd "${koalad}"; git pull; git submodule update --init
+
+# Setup a reboot cronjob to start koalad
+echo "@reboot \"${php}\" \"${koalad}\"/main.php 0" > "${crond}"/koalad
 
 # Alert the user of a required reboot
 if [ -f /var/run/reboot-required ]; then
