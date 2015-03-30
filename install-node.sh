@@ -10,6 +10,7 @@ export    confdphp="/etc/php5/conf.d"
 export       crond="/etc/cron.d"
 export      koalad="/usr/local/koalad"
 export  libvirtphp="http://libvirt.org/sources/php/libvirt-php-0.4.8.tar.gz"
+export      logdir="/var/log"
 export          wd="`pwd`"
 export         tmp="/tmp"
 
@@ -62,9 +63,23 @@ fi
 cd "${koalad}"; git pull; git submodule update --init
 
 # Setup a reboot cronjob to start koalad
-echo "@reboot root ${php} ${koalad}/main.php 0" > "${crond}"/koalad
+echo "@reboot root ${php} ${koalad}/main.php 0 > ${logdir}/koalad" > \
+  "${crond}"/koalad
 chmod 600 "${crond}"/koalad
 chown root:root "${crond}"/koalad
+
+echo
+echo "#########################################################################"
+echo "#                        Installation Complete!                         #"
+echo "#         Open a ticket on GitHub if you encouter any problems.         #"
+echo "#########################################################################"
+echo
+
+# Check existence of GPG public key
+if [ ! -f "${koalad}"/data/KoalaCore/gpg.pub ]; then
+  echo "Don't forget to install your master's GPG public key at:"
+  echo "${koalad}"/data/KoalaCore/gpg.pub
+fi
 
 # Alert the user of a required reboot
 if [ -f /var/run/reboot-required ]; then
