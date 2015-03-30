@@ -65,7 +65,7 @@ cd "${koalad}"; git pull; git submodule update --init
 # Setup a reboot cronjob to start koalad
 echo "@reboot root ${php} ${koalad}/main.php 0 > ${logdir}/koalad" > \
   "${crond}"/koalad
-chmod 600 "${crond}"/koalad
+chmod 644 "${crond}"/koalad
 chown root:root "${crond}"/koalad
 
 echo
