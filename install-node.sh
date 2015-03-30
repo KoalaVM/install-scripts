@@ -62,7 +62,9 @@ fi
 cd "${koalad}"; git pull; git submodule update --init
 
 # Setup a reboot cronjob to start koalad
-echo "@reboot \"${php}\" \"${koalad}\"/main.php 0" > "${crond}"/koalad
+echo "@reboot root ${php} ${koalad}/main.php 0" > "${crond}"/koalad
+chmod 600 "${crond}"/koalad
+chown root:root "${crond}"/koalad
 
 # Alert the user of a required reboot
 if [ -f /var/run/reboot-required ]; then
