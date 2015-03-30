@@ -21,7 +21,7 @@ apt-get dist-upgrade -y
 # Make sure required packages are installed
 apt-get install -y bridge-utils build-essential git gnutls-bin libvirt-bin \
   qemu-kvm libgpgme11-dev libvirt-dev libxml2-dev php-pear php5-cli php5-dev \
-  pkg-config virtinst xen-hypervisor xsltproc
+  pkg-config virtinst xen-hypervisor-4.4 xsltproc
 
 # Clean-up after ourselves
 apt-get autoremove -y
