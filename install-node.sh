@@ -11,6 +11,9 @@ export      crond="/etc/cron.d"
 export     koalad="/usr/local/koalad"
 export libvirtphp="http://libvirt.org/sources/php/libvirt-php-0.4.8.tar.gz"
 export     logdir="/var/log"
+export   packages="bridge-utils build-essential git gnutls-bin libvirt-bin \
+  qemu-kvm libgpgme11-dev libvirt-dev libxml2-dev php-pear php5-cli php5-dev \
+  pkg-config virtinst xen-hypervisor-4.4 xsltproc"
 export         wd="`pwd`"
 export        tmp="/tmp"
 
@@ -19,13 +22,19 @@ apt-get update
 apt-get dist-upgrade -y
 
 # Make sure required packages are installed
-apt-get install -y bridge-utils build-essential git gnutls-bin libvirt-bin \
-  qemu-kvm libgpgme11-dev libvirt-dev libxml2-dev php-pear php5-cli php5-dev \
-  pkg-config virtinst xen-hypervisor-4.4 xsltproc
+apt-get install -y ${packages}
 
 # Clean-up after ourselves
 apt-get autoremove -y
 apt-get autoclean
+
+# Test installed packages
+for i in ${packages}; do
+  if [ "`apt-cache pkgnames | grep \"${i}\"`" = "" ]; then
+    echo "Package \"${i}\" was not found; exiting."
+    exit 2
+  fi
+done
 
 # Define variable for PHP executable
 export php="`which php`"
@@ -33,7 +42,7 @@ export php="`which php`"
 # Search for PHP executable
 if [ "${php}" = "" ]; then
   echo "Could not find PHP executable."
-  exit 2
+  exit 3
 fi
 
 # Make sure required directories are created
@@ -55,6 +64,14 @@ tar xvf "${tmp}"/libvirt-php.tar.gz -C "${tmp}"
 cd "${tmp}"/libvirt-php*; ./configure; make install; cd "${wd}"
 rm -rf "${tmp}"/libvirt-php*
 echo "extension=libvirt-php.so" > "${confdphp}"/30-libvirtphp.ini
+
+# Test PHP modules
+for i in gnupg libvirt; do
+  if [ "`\"${php}\" -m | grep \"${i}\"`" = "" ]; then
+    echo "Could not find PHP module \"${i}\"; exiting."
+    exit 4
+  fi
+done
 
 # Upgrade koalad if it exists, otherwise clone it to "${koalad}"
 if [ ! -d "${koalad}" ]; then
