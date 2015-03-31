@@ -76,7 +76,7 @@ echo "#########################################################################"
 echo
 
 # Check existence of GPG public key
-mkdir -p "${koalad}"/data/KoalaCore
+mkdir -p "${koalad}/data/KoalaCore"
 export gpgpub="${koalad}/data/KoalaCore/gpg.pub"
 touch ${gpgpub}
 if [ "`wc -c \"${gpgpub}\" | awk '{print $1}'`" = "0" ]; then
