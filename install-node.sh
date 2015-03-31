@@ -6,13 +6,13 @@ if [ "`whoami`" != "root" ]; then
 fi
 
 # Setup environment variables
-export    confdphp="/etc/php5/conf.d"
-export       crond="/etc/cron.d"
-export      koalad="/usr/local/koalad"
-export  libvirtphp="http://libvirt.org/sources/php/libvirt-php-0.4.8.tar.gz"
-export      logdir="/var/log"
-export          wd="`pwd`"
-export         tmp="/tmp"
+export   confdphp="/etc/php5/conf.d"
+export      crond="/etc/cron.d"
+export     koalad="/usr/local/koalad"
+export libvirtphp="http://libvirt.org/sources/php/libvirt-php-0.4.8.tar.gz"
+export     logdir="/var/log"
+export         wd="`pwd`"
+export        tmp="/tmp"
 
 # Upgrade the current system
 apt-get update
@@ -27,14 +27,14 @@ apt-get install -y bridge-utils build-essential git gnutls-bin libvirt-bin \
 apt-get autoremove -y
 apt-get autoclean
 
+# Define variable for PHP executable
+export php="`which php`"
+
 # Search for PHP executable
-if [ "`which php`" = "" ]; then
+if [ "${php}" = "" ]; then
   echo "Could not find PHP executable."
   exit 2
 fi
-
-# Define variable for PHP executable
-export php="`which php`"
 
 # Make sure required directories are created
 for i in "${confdphp}" `basename "${koalad}"` "${tmp}"; do
