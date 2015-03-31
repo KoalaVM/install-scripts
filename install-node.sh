@@ -29,8 +29,9 @@ apt-get autoremove -y
 apt-get autoclean
 
 # Test installed packages
+export aptcache="`apt-cache pkgnames`"
 for i in ${packages}; do
-  if [ "`apt-cache pkgnames | grep \"${i}\"`" = "" ]; then
+  if [ "`echo \"${aptcache}\" | grep \"${i}\"`" = "" ]; then
     echo "Package \"${i}\" was not found; exiting."
     exit 2
   fi
@@ -66,8 +67,9 @@ rm -rf "${tmp}"/libvirt-php*
 echo "extension=libvirt-php.so" > "${confdphp}"/30-libvirtphp.ini
 
 # Test PHP modules
+export phpm="`\"${php}\" -m`"
 for i in gnupg libvirt; do
-  if [ "`\"${php}\" -m | grep \"${i}\"`" = "" ]; then
+  if [ "`echo \"${phpm}\" | grep \"${i}\"`" = "" ]; then
     echo "Could not find PHP module \"${i}\"; exiting."
     exit 4
   fi
