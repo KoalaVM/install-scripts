@@ -46,7 +46,7 @@ if [ "${php}" = "" ]; then
 fi
 
 # Make sure required directories are created
-for i in "${confdphp}" `basename "${koalad}"` "${tmp}"; do
+for i in "${confdphp}" "${koalad}" "${tmp}"; do
   mkdir -p "$i";
 done
 
