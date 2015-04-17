@@ -86,7 +86,7 @@ Requires=libvirt-bin.service
 After=libvirt-bin.service
 
 [Service]
-ExecStart=/usr/bin/php /usr/local/koalad/main.php 1
+ExecStart=/usr/bin/php /usr/local/koalad/main.php
 PIDFile=/usr/local/koalad/data/koalad.pid
 Type=simple
 
