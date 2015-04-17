@@ -6,7 +6,7 @@ if [ "`whoami`" != "root" ]; then
 fi
 
 # Setup environment variables
-export   confdphp="/etc/php5/conf.d"
+export   confdphp="/etc/php5/cli/conf.d"
 export    systemd="/etc/systemd/system"
 export     koalad="/usr/local/koalad"
 export libvirtphp="http://libvirt.org/sources/php/libvirt-php-0.4.8.tar.gz"
@@ -46,7 +46,7 @@ if [ "${php}" = "" ]; then
 fi
 
 # Make sure required directories are created
-for i in "${confdphp}" "${koalad}" "${tmp}"; do
+for i in "${confdphp}" "${tmp}"; do
   mkdir -p "$i";
 done
 
@@ -111,6 +111,7 @@ touch ${gpgpub}
 if [ "`wc -c \"${gpgpub}\" | awk '{print $1}'`" = "0" ]; then
   echo "Don't forget to install your master's GPG public key at:"
   echo "${koalad}"/data/KoalaCore/gpg.pub
+  echo
 fi
 
 # Alert the user of a required reboot
