@@ -7,7 +7,7 @@ fi
 
 # Setup environment variables
 export   confdphp="/etc/php5/conf.d"
-export      crond="/etc/cron.d"
+export    systemd="/etc/systemd/system"
 export     koalad="/usr/local/koalad"
 export libvirtphp="http://libvirt.org/sources/php/libvirt-php-0.4.8.tar.gz"
 export     logdir="/var/log"
@@ -79,16 +79,28 @@ if [ ! -d "${koalad}" ]; then
 fi
 cd "${koalad}"; git pull; git submodule update --init
 
-# Setup a reboot cronjob to start koalad
-echo "@reboot root ${php} ${koalad}/main.php 0 > ${logdir}/koalad" > \
-  "${crond}"/koalad
-chmod 644 "${crond}"/koalad
-chown root:root "${crond}"/koalad
+# Setup a systemd unit to start koalad
+echo "[Unit]
+Description=koalad
+Requires=libvirt-bin.service
+After=libvirt-bin.service
+
+[Service]
+ExecStart=/usr/bin/php /usr/local/koalad/main.php 1
+PIDFile=/usr/local/koalad/data/koalad.pid
+Type=simple
+
+[Install]
+WantedBy=multi-user.target" > "${systemd}"/koalad.service
+chmod 644 "${systemd}"/koalad.service
+chown root:root "${systemd}"/koalad.service
+systemctl enable koalad.service
 
 echo
 echo "#########################################################################"
-echo "#                        Installation Complete!                         #"
+echo "#                         Installation Complete!                        #"
 echo "#         Open a ticket on GitHub if you encouter any problems.         #"
+echo "#       Use init=/bin/systemd to auto-start koalad on system boot.      #"
 echo "#########################################################################"
 echo
 
