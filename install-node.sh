@@ -109,13 +109,13 @@ echo "#                                                                       #"
 echo "#  -------------------------------------------------------------------  #"
 echo "#                                                                       #"
 echo "#                                 NOTE:                                 #"
-echo "#                                                                       #"
 if [ "${virtcap}" = "" ]; then
+echo "#                                                                       #"
 echo "#  * No virtualization support is installed;                            #"
 echo "#    Install one of the following:  xen-hypervisor-4.4 -or- qemu-kvm    #"
 fi
-echo "#                                                                       #"
 if [ "${autoboot}" = "" ]; then
+echo "#                                                                       #"
 echo "#  * Use init=/bin/systemd to auto-start koalad on system boot.         #"
 fi
 fi
