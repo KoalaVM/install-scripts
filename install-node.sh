@@ -6,16 +6,18 @@ if [ "`whoami`" != "root" ]; then
 fi
 
 # Setup environment variables
+export   autoboot="`grep -ir systemd /boot`"
 export   confdphp="/etc/php5/cli/conf.d"
-export    systemd="/etc/systemd/system"
 export     koalad="/usr/local/koalad"
 export libvirtphp="http://libvirt.org/sources/php/libvirt-php-0.4.8.tar.gz"
 export     logdir="/var/log"
 export   packages="bridge-utils build-essential git gnutls-bin libvirt-bin \
-  qemu-kvm libgpgme11-dev libvirt-dev libxml2-dev php-pear php5-cli php5-dev \
-  pkg-config virtinst xen-hypervisor-4.4 xsltproc"
-export         wd="`pwd`"
+  libgpgme11-dev libvirt-dev libxml2-dev php-pear php5-cli php5-dev pkg-config \
+  virtinst xsltproc"
+export    systemd="/etc/systemd/system"
 export        tmp="/tmp"
+export    virtcap="`apt-cache pkgnames | grep -i 'xen-hypervisor\|qemu-kvm'`"
+export         wd="`pwd`"
 
 # Upgrade the current system
 apt-get update
@@ -98,9 +100,26 @@ systemctl enable koalad.service
 
 echo
 echo "#########################################################################"
+echo "#                                                                       #"
 echo "#                         Installation Complete!                        #"
+echo "#                                                                       #"
 echo "#         Open a ticket on GitHub if you encouter any problems.         #"
-echo "#       Use init=/bin/systemd to auto-start koalad on system boot.      #"
+if [ "${virtcap}" = "" ] || [ "${autoboot}" = "" ]; then
+echo "#                                                                       #"
+echo "#  -------------------------------------------------------------------  #"
+echo "#                                                                       #"
+echo "#                                 NOTE:                                 #"
+echo "#                                                                       #"
+if [ "${virtcap}" = "" ]; then
+echo "#  * No virtualization support is installed;                            #"
+echo "#    Install one of the following:  xen-hypervisor-4.4 -or- qemu-kvm    #"
+fi
+echo "#                                                                       #"
+if [ "${autoboot}" = "" ]; then
+echo "#  * Use init=/bin/systemd to auto-start koalad on system boot.         #"
+fi
+fi
+echo "#                                                                       #"
 echo "#########################################################################"
 echo
 
