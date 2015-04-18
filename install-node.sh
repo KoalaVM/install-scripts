@@ -16,7 +16,7 @@ export   packages="bridge-utils build-essential git gnutls-bin libvirt-bin \
   virtinst xsltproc"
 export    systemd="/etc/systemd/system"
 export        tmp="/tmp"
-export    virtcap="`apt-cache pkgnames | grep -i 'xen-hypervisor\|qemu-kvm'`"
+export    virtcap="`dpkg --get-selections | grep -i 'xen-hypervisor\|qemu-kvm'`"
 export         wd="`pwd`"
 
 # Upgrade the current system
