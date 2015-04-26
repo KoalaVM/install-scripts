@@ -16,6 +16,9 @@ other thing that needs to be configured is a bridge interface on the hypervisor.
 [This link](https://help.ubuntu.com/community/KVM/Networking#Bridged_Networking)
 is a good tutorial to follow when setting up a bridge.
 
+If a hypervisor is not installed, you will be prompted to install one after
+running `install-node.sh`.
+
 Licensing
 =========
 
