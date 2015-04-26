@@ -10,10 +10,9 @@ any and all software developed under the KoalaVM organization.
 `install-node.sh`
 =================
 
-This script installs the requirements for Xen, KVM, and `koalad` and clones
-`koalad` to `/usr/local/koalad` with submodules initialized.  Apart from
-`koalad`, the only other thing that needs to be configured is a bridge interface
-on the hypervisor.
+This script installs the requirements for and `koalad` and clones `koalad` to
+`/usr/local/koalad` with submodules initialized.  Apart from `koalad`, the only
+other thing that needs to be configured is a bridge interface on the hypervisor.
 [This link](https://help.ubuntu.com/community/KVM/Networking#Bridged_Networking)
 is a good tutorial to follow when setting up a bridge.
 
