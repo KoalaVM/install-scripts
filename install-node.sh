@@ -112,7 +112,7 @@ echo "#                                 NOTE:                                 #"
 if [ "${virtcap}" = "" ]; then
 echo "#                                                                       #"
 echo "#  * No virtualization support is installed;                            #"
-echo "#    Install one of the following:  xen-hypervisor-4.4 -or- qemu-kvm    #"
+echo "#    Install one of the following:   xen-hypervisor   -or-   qemu-kvm   #"
 fi
 if [ "${autoboot}" = "" ]; then
 echo "#                                                                       #"
