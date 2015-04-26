@@ -10,7 +10,7 @@ any and all software developed under the KoalaVM organization.
 `install-node.sh`
 =================
 
-This script installs the requirements for and `koalad` and clones `koalad` to
+This script installs the requirements for `koalad` and clones `koalad` to
 `/usr/local/koalad` with submodules initialized.  Apart from `koalad`, the only
 other thing that needs to be configured is a bridge interface on the hypervisor.
 [This link](https://help.ubuntu.com/community/KVM/Networking#Bridged_Networking)
