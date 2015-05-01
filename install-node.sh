@@ -6,17 +6,17 @@ if [ "`whoami`" != "root" ]; then
 fi
 
 # Setup environment variables
-export   autoboot="`grep -ir systemd /boot`"
+export   autoboot="`grep -ir systemd /boot; ls -l /sbin/init | grep -i systemd`"
 export   confdphp="/etc/php5/cli/conf.d"
 export     koalad="/usr/local/koalad"
 export libvirtphp="http://libvirt.org/sources/php/libvirt-php-0.4.8.tar.gz"
 export     logdir="/var/log"
 export   packages="bridge-utils build-essential git gnutls-bin libvirt-bin \
   libgpgme11-dev libvirt-dev libxml2-dev php-pear php5-cli php5-dev pkg-config \
-  virtinst xsltproc"
+  qemu-kvm virtinst xsltproc"
 export    systemd="/etc/systemd/system"
 export        tmp="/tmp"
-export    virtcap="`dpkg --get-selections | grep -i 'xen-hypervisor\|qemu-kvm'`"
+export    virtcap="`dpkg --get-selections | grep -i 'xen-hypervisor'`"
 export         wd="`pwd`"
 
 # Upgrade the current system
@@ -98,11 +98,19 @@ chmod 644 "${systemd}"/koalad.service
 chown root:root "${systemd}"/koalad.service
 systemctl enable koalad.service
 
+# Initialize GPG public key if it does not exist
+mkdir -p "${koalad}"/data/KoalaCore
+export gpgpub="${koalad}/data/KoalaCore/gpg.pub"
+touch ${gpgpub}
+
 echo
 echo "#########################################################################"
 echo "#                                                                       #"
 echo "#                         Installation Complete!                        #"
 echo "#                                                                       #"
+if [ "`wc -c \"${gpgpub}\" | awk '{print $1}'`" = "0" ]; then
+echo "#         Don't forget to install your master's GPG public key!         #"
+fi
 echo "#         Open a ticket on GitHub if you encouter any problems.         #"
 if [ "${virtcap}" = "" ] || [ "${autoboot}" = "" ]; then
 echo "#                                                                       #"
@@ -111,27 +119,19 @@ echo "#                                                                       #"
 echo "#                                 NOTE:                                 #"
 if [ "${virtcap}" = "" ]; then
 echo "#                                                                       #"
-echo "#  * No virtualization support is installed;                            #"
-echo "#    Install one of the following:   xen-hypervisor   -or-   qemu-kvm   #"
+echo "#  * KVM support is installed by default; install xen-hypervisor to     #"
+echo "#    enable Xen virtualization capabilities.                            #"
 fi
 if [ "${autoboot}" = "" ]; then
 echo "#                                                                       #"
-echo "#  * Use init=/bin/systemd to auto-start koalad on system boot.         #"
+echo "#  * Use init=/bin/systemd in GRUB to auto-start koalad on system boot. #"
+echo "#    Otherwise, create a cron job to start koalad:                      #"
+echo "#      /etc/cron.d/koalad -> '@reboot root koalad'                      #"
 fi
 fi
 echo "#                                                                       #"
 echo "#########################################################################"
 echo
-
-# Check existence of GPG public key
-mkdir -p "${koalad}"/data/KoalaCore
-export gpgpub="${koalad}/data/KoalaCore/gpg.pub"
-touch ${gpgpub}
-if [ "`wc -c \"${gpgpub}\" | awk '{print $1}'`" = "0" ]; then
-  echo "Don't forget to install your master's GPG public key at:"
-  echo "${koalad}"/data/KoalaCore/gpg.pub
-  echo
-fi
 
 # Alert the user of a required reboot
 if [ -f /var/run/reboot-required ]; then
