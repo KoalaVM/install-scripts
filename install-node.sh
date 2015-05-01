@@ -101,6 +101,7 @@ systemctl enable koalad.service
 # Add a launcher for koalad to /usr/bin/koalad
 echo "#!/bin/bash
 ${php} ${koalad}/main.php 0" > /usr/bin/koalad
+chmod +x /usr/bin/koalad
 
 # Initialize GPG public key if it does not exist
 mkdir -p "${koalad}"/data/KoalaCore
