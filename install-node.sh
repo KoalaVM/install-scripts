@@ -88,8 +88,8 @@ Requires=libvirt-bin.service
 After=libvirt-bin.service
 
 [Service]
-ExecStart=/usr/bin/php /usr/local/koalad/main.php
-PIDFile=/usr/local/koalad/data/koalad.pid
+ExecStart=${php} ${koalad}/main.php
+PIDFile=${koalad}/data/koalad.pid
 Type=simple
 
 [Install]
@@ -97,6 +97,10 @@ WantedBy=multi-user.target" > "${systemd}"/koalad.service
 chmod 644 "${systemd}"/koalad.service
 chown root:root "${systemd}"/koalad.service
 systemctl enable koalad.service
+
+# Add a launcher for koalad to /usr/bin/koalad
+echo "#!/bin/bash
+${php} ${koalad}/main.php 0" > /usr/bin/koalad
 
 # Initialize GPG public key if it does not exist
 mkdir -p "${koalad}"/data/KoalaCore
